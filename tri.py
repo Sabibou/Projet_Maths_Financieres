@@ -13,18 +13,17 @@ nb_itmax = 30
 #pip install pandas si la librairie n'est pas encore installée
 
 #load the xlsx file 
-data = pd.read_excel("maths-fi/Data/Projet_eche5.xlsx",skiprows=2) #le fichier excel doit contenir qu'une seule ligne contenant les données des flux
+data = pd.read_excel("maths-fi/Data/Projet_eche5.xlsx") #le fichier excel doit contenir qu'une seule ligne contenant les données des flux
 
 # Read the values of the file in the dataframe
-data = pd.DataFrame(data, columns=[
-                    0, 1, 2, 3, 4, 5, 'V'])
+data = pd.DataFrame(data)
 
 #Print data
 print("Le contenu des données : \n", data)
 
 ## Function calcul_VAN
 
-def VAN(data, n, tau, valRevente):
+def calcul_VAN(data, n, tau, valRevente):
     sum = 0
     if(tau > 0):
         for i in range(1, n+1):
@@ -33,7 +32,7 @@ def VAN(data, n, tau, valRevente):
 
 ## Function calcul_echeance_moy
 
-def echenceMoy(data, n, tau, valRevente):
+def calcul_echence_moy(data, n, tau, valRevente):
     sumFlux = 0
     sumFluxAct = 0
     for i in range(1, n+1):
@@ -43,5 +42,5 @@ def echenceMoy(data, n, tau, valRevente):
 
 ## Function calcul_tri_aux
 
-def triAux(I0, B, d):
+def calcul_tri_aux(I0, B, d):
     return pow((B / I0), 1 / d) - 1

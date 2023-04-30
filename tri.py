@@ -2,6 +2,9 @@
 
 import pandas as pd
 import math as m
+import warnings
+
+warnings.simplefilter(action='ignore', category=FutureWarning)
 
 ## init_var_glob
 
@@ -78,7 +81,7 @@ def calcul_tri(data, n, tau0, valRevente = 0):
             d = calcul_echeance_moy(data, n, tau, valRevente)
             tau = calcul_tri_aux(I0, somme, d, valRevente)
             VAN = calcul_VAN(data, n, tau, valRevente)
-            print(VAN) # Affichage de la valeur actuelle nette à chaque itération (pour voir la convergence)
+            print(str(i) + ". VAN(" + str(tau) + ") = " + str(VAN)) # Affichage de la valeur actuelle nette à chaque itération (pour voir la convergence)
             if(((VAN <= epsilon) and (VAN >= -epsilon)) or i >= nb_itmax): # Vérification si la valeur actuelle nette (VAN) est proche de zéro (dans la plage définie par epsilon) ou si le nombre d'itérations dépasse la limite définie (nb_itmax)
                 tri = tau
                 arret = True

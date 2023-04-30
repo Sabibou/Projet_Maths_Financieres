@@ -39,10 +39,10 @@ print("Le nombre d'années est : ", n, "\n")
 
 #tau
 tau = 0.01
-    
+ 
 ## Function calcul_VAN
 
-def calcul_VAN(data, n, tau, valRevente):
+def calcul_VAN(data, n, tau, valRevente = 0):
     sum = 0
     if(tau > 0):
         for i in range(1, n+1):
@@ -51,7 +51,7 @@ def calcul_VAN(data, n, tau, valRevente):
 
 ## Function calcul_echeance_moy
 
-def calcul_echeance_moy(data, n, tau, valRevente):
+def calcul_echeance_moy(data, n, tau, valRevente = 0):
     sumFlux = 0
     sumFluxAct = 0
     for i in range(1, n+1):
@@ -61,29 +61,30 @@ def calcul_echeance_moy(data, n, tau, valRevente):
 
 ## Function calcul_tri_aux
 
-def calcul_tri_aux(I0, B, d):
-    return pow((B / -I0), 1 / d) - 1
+def calcul_tri_aux(I0, B, d, valRevente = 0):
+    return pow(((B + valRevente) / -I0), 1 / d) - 1
 
 ## Function calcul_tri
 
-def calcul_tri(data, n, tau0, valRevente):
-    tri = 0
-    if(tau0 > 0):
+def calcul_tri(data, n, tau0, valRevente = 0):
+    tri = 0 # Initialisation de la variable tri à 0, qui sera utilisée pour stocker la valeur du TRI.
+    if(tau0 > 0): # Vérification si le taux d'actualisation initial (tau0) est supérieur à 0
         tau = tau0
-        i = 0
-        arret = False
-        somme = sum(B)
+        i = 0 # Initialisation du compteur i à 0, qui sera utilisé pour suivre le nombre d'itérations.
+        arret = False # Initialisation de la variable arret à False, qui sera utilisée pour déterminer si l'itération doit être arrêtée.
+        somme = sum(B) # Calcul de la somme des valeurs des flux (B) du projet.
         while(not arret):
             i+=1
             d = calcul_echeance_moy(data, n, tau, valRevente)
-            tau = calcul_tri_aux(I0, somme, d)
+            tau = calcul_tri_aux(I0, somme, d, valRevente)
             VAN = calcul_VAN(data, n, tau, valRevente)
-            
-            if(((VAN <= epsilon) and (VAN >= -epsilon)) or i >= nb_itmax):
+            print(VAN) # Affichage de la valeur actuelle nette à chaque itération (pour voir la convergence)
+            if(((VAN <= epsilon) and (VAN >= -epsilon)) or i >= nb_itmax): # Vérification si la valeur actuelle nette (VAN) est proche de zéro (dans la plage définie par epsilon) ou si le nombre d'itérations dépasse la limite définie (nb_itmax)
                 tri = tau
                 arret = True
-                #print(i)
     return tri
+
+## Application numérique
 
 print("VAN(" + str(tau) + ") =", end=" ")
 print(calcul_VAN(data, n, tau, valRevente), "\n")
@@ -93,13 +94,14 @@ d0 = calcul_echeance_moy(data, n, tau, valRevente)
 print(d0,"\n")
 
 #d, une date 
-d = 4
-print("tri_aux(" + str(d0) + ") = " + str(calcul_tri_aux(I0, sum(B), d0)) 
+tri_aux = calcul_tri_aux(I0, sum(B), d0, valRevente)
+print("tri_aux(" + str(d0) + ") = " + str(tri_aux) 
       + "\n")
 #print("tri_aux = ", calcul_tri_aux(I0, sum(B), d))
 
 tri = calcul_tri(data, n, tau, valRevente)
-print("tri = " + str(tri), "\n")
+print("\n")
+print("Le taux de rendement interne (TRI) du projet est de : " + str(tri), "\n")
 
-#tri = 0.41196
+#tri = 0.3475
 print("VAN(" + str(tri) + ") = " + str(calcul_VAN(data, n, tri, valRevente)), "\n")

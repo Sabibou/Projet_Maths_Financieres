@@ -1,3 +1,13 @@
+'''
+Code par FERREIRA RODRIGUES Rodrigo
+      et ABIBOU M'hammed Salman
+
+Fait en mai 2023
+
+But : calculer le TRI d'un projet fourni au format .xlsx
+
+'''
+
 ## import_librairies
 
 import pandas as pd
@@ -48,19 +58,22 @@ tau = 0.01
 def calcul_VAN(data, n, tau, valRevente = 0):
     sum = 0
     if(tau > 0):
-        for i in range(1, n+1):
+        for i in range(1, n):
             sum += data.iloc[0, i]/pow(1 + tau, i)
-    return I0 + sum + valRevente
+        sum += (data.iloc[0, n] + valRevente)/pow(1 + tau, n)
+    return I0 + sum
 
 ## Function calcul_echeance_moy
 
 def calcul_echeance_moy(data, n, tau, valRevente = 0):
     sumFlux = 0
     sumFluxAct = 0
-    for i in range(1, n+1):
+    for i in range(1, n):
         sumFlux += data[i]
         sumFluxAct += data[i]/pow(1+tau, i)
-    return m.log((sumFlux + valRevente) /sumFluxAct) / m.log(1 + tau)
+    sumFlux += data[n] + valRevente
+    sumFluxAct += (data[n] + valRevente)/pow(1+tau, n)
+    return m.log((sumFlux) /sumFluxAct) / m.log(1 + tau)
 
 ## Function calcul_tri_aux
 
@@ -96,15 +109,12 @@ print("d_moy(" + str(tau) + ") =", end=" ")
 d0 = calcul_echeance_moy(data, n, tau, valRevente)
 print(d0,"\n")
 
-#d, une date 
 tri_aux = calcul_tri_aux(I0, sum(B), d0, valRevente)
 print("tri_aux(" + str(d0) + ") = " + str(tri_aux) 
       + "\n")
-#print("tri_aux = ", calcul_tri_aux(I0, sum(B), d))
 
 tri = calcul_tri(data, n, tau, valRevente)
 print("\n")
 print("Le taux de rendement interne (TRI) du projet est de : " + str(tri), "\n")
 
-#tri = 0.3475
 print("VAN(" + str(tri) + ") = " + str(calcul_VAN(data, n, tri, valRevente)), "\n")

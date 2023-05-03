@@ -100,12 +100,10 @@ def calcul_tri(data, n, tau0, valRevente = 0):
 
 ## Application numérique
 
-print("VAN(" + str(tau) + ") =", end=" ")
-print(calcul_VAN(data, n, tau, valRevente), "\n")
+print("VAN(" + str(tau) + ") =", calcul_VAN(data, n, tau, valRevente), "\n")
 
-print("d_moy(" + str(tau) + ") =", end=" ")
 d0 = calcul_echeance_moy(data, n, tau, valRevente)
-print(d0,"\n")
+print("d_moy(" + str(tau) + ") =", d0,"\n")
 
 tri_aux = calcul_tri_aux(I0, sum(B), d0, valRevente)
 print("tri_aux(" + str(d0) + ") = " + str(tri_aux) 

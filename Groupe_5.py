@@ -66,13 +66,11 @@ def calcul_VAN(data, n, tau, valRevente = 0):
 ## Function calcul_echeance_moy
 
 def calcul_echeance_moy(data, n, tau, valRevente = 0):
-    sumFlux = 0
     sumFluxAct = 0
+    sumFlux = sum(B) + valRevente
     for i in range(1, n):
-        sumFlux += data[i]
-        sumFluxAct += data[i]/pow(1+tau, i)
-    sumFlux += data[n] + valRevente
-    sumFluxAct += (data[n] + valRevente)/pow(1+tau, n)
+        sumFluxAct += data.iloc[0,i]/pow(1 + tau, i)
+    sumFluxAct += (data.iloc[0,n] + valRevente)/pow(1 + tau, n)
     return m.log((sumFlux) /sumFluxAct) / m.log(1 + tau)
 
 ## Function calcul_tri_aux

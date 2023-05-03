@@ -53,25 +53,26 @@ print("Le nombre d'années est : ", n, "\n")
 #tau
 tau = 0.01
  
+## Function sum_flux_actu
+
+def sum_flux_actu(data, n, tau, valRevente = 0):
+    sumFluxAct = 0
+    for i in range(1, n):
+        sumFluxAct += data.iloc[0,i]/pow(1 + tau, i)
+    sumFluxAct += (data.iloc[0,n] + valRevente)/pow(1 + tau, n)
+    return sumFluxAct
+
 ## Function calcul_VAN
 
 def calcul_VAN(data, n, tau, valRevente = 0):
-    sum = 0
     if(tau > 0):
-        for i in range(1, n):
-            sum += data.iloc[0, i]/pow(1 + tau, i)
-        sum += (data.iloc[0, n] + valRevente)/pow(1 + tau, n)
-    return I0 + sum
+        return I0 + sum_flux_actu(data, n, tau, valRevente)
 
 ## Function calcul_echeance_moy
 
 def calcul_echeance_moy(data, n, tau, valRevente = 0):
-    sumFluxAct = 0
     sumFlux = sum(B) + valRevente
-    for i in range(1, n):
-        sumFluxAct += data.iloc[0,i]/pow(1 + tau, i)
-    sumFluxAct += (data.iloc[0,n] + valRevente)/pow(1 + tau, n)
-    return m.log((sumFlux) /sumFluxAct) / m.log(1 + tau)
+    return m.log((sumFlux) /sum_flux_actu(data, n, tau, valRevente)) / m.log(1 + tau)
 
 ## Function calcul_tri_aux
 
